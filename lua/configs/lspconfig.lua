@@ -1,34 +1,50 @@
--- load defaults i.e lua_lsp
 require("nvchad.configs.lspconfig").defaults()
-
-local lspconfig = require "lspconfig"
-
--- EXAMPLE
-local servers = { "html", "cssls", "pyright", "dartls", "ts_ls", "ruff", "gopls" }
-local nvlsp = require "nvchad.configs.lspconfig"
+require "lspconfig"
 
 vim.lsp.inlay_hint.enable()
 
+local servers =
+  { "html", "cssls", "pyright", "dartls", "ts_ls", "ruff", "gopls", "clangd", "buf_ls", "cairo_ls", "texlab" }
+
 -- lsps with default config
-for _, lsp in ipairs(servers) do
-  lspconfig[lsp].setup {
-    on_attach = nvlsp.on_attach,
-    on_init = nvlsp.on_init,
-    capabilities = nvlsp.capabilities,
-  }
-end
+-- for _, lsp in ipairs(servers) do
+--   vim.lsp.config(lsp, {
+--     on_attach = nvlsp.on_attach,
+--     on_init = nvlsp.on_init,
+--     capabilities = nvlsp.capabilities,
+--   })
+-- end
+vim.lsp.enable(servers, true)
 
-lspconfig.cairo_ls.setup {
-  on_attach = nvlsp.on_attach,
-  on_init = nvlsp.on_init,
-  capabilities = nvlsp.capabilities,
+-- vim.lsp.config("buf_ls", {
+--   on_attach = nvlsp.on_attach,
+--   on_init = nvlsp.on_init,
+--   capabilities = nvlsp.capabilities,
+--   filetypes = { "proto" },
+-- })
+-- vim.lsp.enable("buf_ls", true)
+
+vim.lsp.config("cairo_ls", {
+  -- on_attach = nvlsp.on_attach,
+  -- on_init = nvlsp.on_init,
+  -- capabilities = nvlsp.capabilities,
   cmd = { "scarb", "cairo-language-server", "/C", "--node-ipc" },
-}
+  filetypes = { "cairo" },
+})
+-- vim.lsp.enable("cairo_ls", true)
 
-lspconfig.texlab.setup {
-  on_attach = nvlsp.on_attach,
-  on_init = nvlsp.on_init,
-  capabilities = nvlsp.capabilities,
+vim.lsp.config("clangd", {
+  -- on_attach = nvlsp.on_attach,
+  -- on_init = nvlsp.on_init,
+  -- capabilities = nvlsp.capabilities,
+  filetypes = { "c", "cpp", "objc", "objcpp", "cuda" },
+})
+-- vim.lsp.enable("clangd", true)
+
+vim.lsp.config("texlab", {
+  -- on_attach = nvlsp.on_attach,
+  -- on_init = nvlsp.on_init,
+  -- capabilities = nvlsp.capabilities,
   settings = {
     texlab = {
       build = {
@@ -37,10 +53,11 @@ lspconfig.texlab.setup {
       },
     },
   },
-}
+})
+-- vim.lsp.enable("texlab", true)
 
 -- configuring single server, example: typescript
--- lspconfig.ts_ls.setup {
+-- vim.lsp.config("ts_ls", {
 --   on_attach = nvlsp.on_attach,
 --   on_init = nvlsp.on_init,
 --   capabilities = nvlsp.capabilities,

@@ -4,12 +4,18 @@ return {
     version = "^5", -- Recommended
     lazy = false, -- This plugin is already lazy
     config = function(_, _)
-      local nvlsp = require "nvchad.configs.lspconfig"
       vim.g.rustaceanvim = {
         server = {
-          on_attach = nvlsp.on_attach,
-          on_init = nvlsp.on_init,
-          capabilities = nvlsp.capabilities,
+          -- on_attach = nvlsp.on_attach,
+          -- on_init = nvlsp.on_init,
+          -- capabilities = nvlsp.capabilities,
+          default_settings = {
+            ["rust-analyzer"] = {
+              ["cargo"] = {
+                ["features"] = "all",
+              },
+            },
+          },
         },
       }
     end,
