@@ -16,6 +16,9 @@ local servers =
 -- end
 vim.lsp.enable(servers, true)
 
+require("go").setup()
+vim.lsp.config("gopls", require("go.lsp").config())
+
 -- vim.lsp.config("buf_ls", {
 --   on_attach = nvlsp.on_attach,
 --   on_init = nvlsp.on_init,

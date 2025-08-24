@@ -13,13 +13,6 @@ map("n", "<leader>dl", function()
   vim.diagnostic.open_float { border = "rounded" }
 end, { desc = "Floating diagnostic" })
 --
-map("n", "<leader>dN", function()
-  vim.diagnostic.goto_prev { float = { border = "rounded" } }
-end, { desc = "Goto prev" })
-
-map("n", "<leader>dn", function()
-  vim.diagnostic.goto_next { float = { border = "rounded" } }
-end, { desc = "Goto next" })
 map("n", "<leader>ip", function()
   local venv = os.getenv "VIRTUAL_ENV" or os.getenv "CONDA_PREFIX"
   if venv ~= nil then

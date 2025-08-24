@@ -1,5 +1,32 @@
 return {
   {
+    "neovim/nvim-lspconfig",
+    config = function()
+      require "configs.lspconfig"
+    end,
+  },
+  {
+    "ray-x/navigator.lua",
+    dependencies = {
+      { "ray-x/guihua.lua" },
+      { "neovim/nvim-lspconfig" },
+    },
+  },
+  {
+    "ray-x/go.nvim",
+    dependencies = {
+      "ray-x/guihua.lua", -- optional
+      "nvim-treesitter/nvim-treesitter",
+      "neovim/nvim-lspconfig",
+    },
+    opts = function()
+      return {
+        ["dap_debug"] = false,
+      }
+    end,
+    -- config = function(_, _) end,
+  },
+  {
     "mrcjkb/rustaceanvim",
     version = "^5", -- Recommended
     lazy = false, -- This plugin is already lazy
@@ -22,20 +49,22 @@ return {
   },
   {
     "pappasam/nvim-repl",
-    init = function()
-      vim.g["repl_filetype_commands"] = {
-        bash = "bash",
-        javascript = "node",
-        haskell = "ghci",
-        ocaml = { cmd = "utop", suffix = ";;" },
-        python = "ipython --no-autoindent",
-        r = "R",
-        sh = "sh",
-        vim = "nvim --clean -ERM",
-        zsh = "zsh",
+    opts = function()
+      return {
+        filetype_commands = {
+          bash = "bash",
+          javascript = "node",
+          haskell = "ghci",
+          ocaml = { cmd = "utop", suffix = ";;" },
+          python = "python",
+          r = "R",
+          sh = "sh",
+          vim = "nvim --clean -ERM",
+          zsh = "zsh",
+        },
       }
     end,
-    cmd = "ReplOpen",
+    cmd = "ReplToggle",
     keys = {
       { "<Leader>cc", "<Cmd>ReplNewCell<CR>", mode = "n", desc = "Create New Cell" },
       { "<Leader>cr", "<Plug>(ReplSendCell)", mode = "n", desc = "Send Repl Cell" },
@@ -81,22 +110,31 @@ return {
   },
   {
     "nvim-telescope/telescope.nvim",
-    dependencies = { "nvim-treesitter/nvim-treesitter" },
+    dependencies = { "nvim-treesitter/nvim-treesitter", "nvim-telescope/telescope-ui-select.nvim" },
     cmd = "Telescope",
-    opts = function()
-      return require "nvchad.configs.telescope"
-    end,
-    config = function(_, opts)
+    lazy = false,
+    config = function(_, _)
       local actions = require "telescope.actions"
       local open_with_trouble = require("trouble.sources.telescope").open
 
       -- Use this to add more results without clearing the trouble list
       local add_to_trouble = require("trouble.sources.telescope").add
 
-      opts["defaults"]["mappings"]["i"] = { ["<c-t>"] = open_with_trouble }
-      opts["defaults"]["mappings"]["n"] = { ["<c-t>"] = open_with_trouble }
+      local telescope = require "telescope"
 
-      require("telescope").setup(opts)
+      telescope.setup {
+        defaults = {
+          mappings = {
+            i = { ["<c-t>"] = open_with_trouble },
+            n = { ["<c-t>"] = open_with_trouble },
+          },
+        },
+
+        extensions = {
+          ["ui-select"] = require("telescope.themes").get_dropdown {},
+        },
+      }
+      telescope.load_extension "ui-select"
     end,
   },
   {
@@ -175,28 +213,11 @@ return {
       require("project_nvim").setup(opts)
     end,
   },
-
-  -- These are some examples, uncomment them if you want to see them work!
-  {
-    "neovim/nvim-lspconfig",
-    config = function()
-      require "configs.lspconfig"
-    end,
-  },
   {
     "nvim-tree/nvim-tree.lua",
     cmd = { "NvimTreeToggle", "NvimTreeFocus" },
     opts = function()
-      local myConfigs = require "configs.nvimtree"
-      local nvchadConfigs = require "nvchad.configs.nvimtree"
-      local ret = {}
-      for k, v in pairs(nvchadConfigs) do
-        ret[k] = v
-      end
-      for k, v in pairs(myConfigs) do
-        ret[k] = v
-      end
-      return ret
+      return require "configs.nvimtree"
     end,
   },
 
