@@ -9,6 +9,7 @@ local options = {
     dart = { "dart_format" },
     css = { "prettier" },
     html = { "prettier" },
+    go = { "golines" },
   },
 
   format_on_save = {

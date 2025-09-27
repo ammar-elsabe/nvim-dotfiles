@@ -1,5 +1,14 @@
 return {
   {
+    "chrisgrieser/nvim-various-textobjs",
+    event = "VeryLazy",
+    opts = {
+      keymaps = {
+        useDefaults = true,
+      },
+    },
+  },
+  {
     "neovim/nvim-lspconfig",
     config = function()
       require "configs.lspconfig"
@@ -33,7 +42,9 @@ return {
     config = function(_, _)
       vim.g.rustaceanvim = {
         server = {
-          -- on_attach = nvlsp.on_attach,
+          on_attach = function(client, bufnr)
+            client.server_capabilities.semanticTokensProvider = nil
+          end,
           -- on_init = nvlsp.on_init,
           -- capabilities = nvlsp.capabilities,
           default_settings = {
@@ -139,7 +150,11 @@ return {
   },
   {
     "folke/trouble.nvim",
-    opts = {}, -- for default options, refer to the configuration section for custom setup.
+    opts = function()
+      return {
+        max_items = 200000,
+      }
+    end,
     cmd = "Trouble",
     keys = {
       {

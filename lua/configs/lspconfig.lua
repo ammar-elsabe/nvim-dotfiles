@@ -4,7 +4,7 @@ require "lspconfig"
 vim.lsp.inlay_hint.enable()
 
 local servers =
-  { "html", "cssls", "pyright", "dartls", "ts_ls", "ruff", "gopls", "clangd", "buf_ls", "cairo_ls", "texlab" }
+  { "html", "cssls", "pyright", "dartls", "ts_ls", "ruff", "gopls", "clangd", "buf_ls", "cairo_ls", "texlab", "jsonls" }
 
 -- lsps with default config
 -- for _, lsp in ipairs(servers) do
