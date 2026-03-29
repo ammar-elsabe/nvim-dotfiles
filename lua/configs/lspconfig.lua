@@ -1,10 +1,31 @@
 require("nvchad.configs.lspconfig").defaults()
 require "lspconfig"
 
+vim.filetype.add {
+  pattern = {
+    [".*.bazelrc"] = "bazelrc",
+  },
+}
+
 vim.lsp.inlay_hint.enable()
 
-local servers =
-  { "html", "cssls", "pyright", "dartls", "ts_ls", "ruff", "gopls", "clangd", "buf_ls", "cairo_ls", "texlab", "jsonls" }
+local servers = {
+  "html",
+  "cssls",
+  "pyright",
+  "dartls",
+  "ts_ls",
+  "ruff",
+  "gopls",
+  "clangd",
+  "buf_ls",
+  "cairo_ls",
+  "texlab",
+  "jsonls",
+  "bazelrc_lsp",
+  "starpls",
+  "solidity_ls_nomicfoundation",
+}
 
 -- lsps with default config
 -- for _, lsp in ipairs(servers) do
@@ -34,6 +55,14 @@ vim.lsp.config("cairo_ls", {
   cmd = { "scarb", "cairo-language-server", "/C", "--node-ipc" },
   filetypes = { "cairo" },
 })
+
+-- vim.lsp.config("rust_analyzer", {
+--   settings = {
+--     ["rust-analyzer"] = {
+--       linkedProjects = "./rust-project.json"
+--     }
+--   }
+-- })
 -- vim.lsp.enable("cairo_ls", true)
 
 vim.lsp.config("clangd", {

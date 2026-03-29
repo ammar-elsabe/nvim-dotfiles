@@ -1,5 +1,77 @@
 return {
   {
+    "yetone/avante.nvim",
+    event = "VeryLazy",
+    version = false, -- Never set this value to "*"! Never!
+    ---@module 'avante'
+    ---@type avante.Config
+    opts = {
+      instructions_file = "CLAUDE.md",
+      provider = "claude-code",
+      acp_providers = {
+        ["claude-code"] = {
+          command = "bunx",
+          args = { "-y", "@zed-industries/claude-code-acp" },
+          env = {
+            NODE_NO_WARNINGS = "1",
+          },
+        },
+        ["opencode"] = {
+          command = "opencode",
+          args = { "acp" },
+          env = {
+            NODE_NO_WARNINGS = "1",
+          },
+        },
+        ["codex"] = {
+          command = "bunx",
+          args = { "-y", "@zed-industries/codex-acp" },
+          env = {
+            NODE_NO_WARNINGS = "1",
+          },
+        },
+      },
+    },
+    dependencies = {
+      "nvim-lua/plenary.nvim",
+      "MunifTanjim/nui.nvim",
+      --- The below dependencies are optional,
+      "nvim-mini/mini.pick", -- for file_selector provider mini.pick
+      "nvim-telescope/telescope.nvim", -- for file_selector provider telescope
+      "hrsh7th/nvim-cmp", -- autocompletion for avante commands and mentions
+      "ibhagwan/fzf-lua", -- for file_selector provider fzf
+      "stevearc/dressing.nvim", -- for input provider dressing
+      "folke/snacks.nvim", -- for input provider snacks
+      "nvim-tree/nvim-web-devicons", -- or echasnovski/mini.icons
+      "zbirenbaum/copilot.lua", -- for providers='copilot'
+      {
+        -- support for image pasting
+        "HakonHarnes/img-clip.nvim",
+        event = "VeryLazy",
+        opts = {
+          -- recommended settings
+          default = {
+            embed_image_as_base64 = false,
+            prompt_for_file_name = false,
+            drag_and_drop = {
+              insert_mode = true,
+            },
+            -- required for Windows users
+            use_absolute_path = true,
+          },
+        },
+      },
+      {
+        -- Make sure to set this up properly if you have lazy=true
+        "MeanderingProgrammer/render-markdown.nvim",
+        opts = {
+          file_types = { "markdown", "Avante" },
+        },
+        ft = { "markdown", "Avante" },
+      },
+    },
+  },
+  {
     "chrisgrieser/nvim-various-textobjs",
     event = "VeryLazy",
     opts = {
@@ -28,32 +100,36 @@ return {
       "nvim-treesitter/nvim-treesitter",
       "neovim/nvim-lspconfig",
     },
-    opts = function()
-      return {
-        ["dap_debug"] = false,
-      }
-    end,
     -- config = function(_, _) end,
   },
   {
     "mrcjkb/rustaceanvim",
-    version = "^5", -- Recommended
     lazy = false, -- This plugin is already lazy
     config = function(_, _)
       vim.g.rustaceanvim = {
         server = {
-          on_attach = function(client, bufnr)
-            client.server_capabilities.semanticTokensProvider = nil
-          end,
           -- on_init = nvlsp.on_init,
           -- capabilities = nvlsp.capabilities,
           default_settings = {
             ["rust-analyzer"] = {
               ["cargo"] = {
-                ["features"] = "all",
+                --   -- ["features"] = "all",
+                extraEnv = {
+                  ENTRYPOINT_JSON_PATH = "contracts/out/EntryPoint.sol/EntryPoint.json",
+                  SELL_ORDER_REGISTRY_JSON_PATH = "contracts/out/SellOrderRegistry.sol/SellOrderRegistry.json",
+                  SETTLEMENT_ROUTER_JSON_PATH = "contracts/out/SettlementRouter.sol/SettlementRouter.json",
+                  INVOICE_ACCOUNT_JSON_PATH = "contracts/out/InvoiceAccount.sol/InvoiceAccount.json",
+                  INVOICE_FACTORY_JSON_PATH = "contracts/out/InvoiceFactory.sol/InvoiceFactory.json",
+                  MOCK_ERC20_JSON_PATH = "contracts/out/MockERC20.sol/MockERC20.json",
+                  PUBLIC_ERC6492_VALIDATOR_JSON_PATH = "contracts/out/PublicERC6492Validator.sol/PublicERC6492Validator.json",
+                },
               },
+              -- linkedProjects = { "rust-project.json" },
             },
           },
+        },
+        dap = {
+          autoload_configurations = false,
         },
       }
     end,

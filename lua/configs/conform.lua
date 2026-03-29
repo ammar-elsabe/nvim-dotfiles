@@ -10,13 +10,16 @@ local options = {
     css = { "prettier" },
     html = { "prettier" },
     go = { "golines" },
+    rust = { "rustfmt", lsp_format = "fallback" },
+    solidity = { lsp_format = "always" },
+    bazel = { "buildifier", lsp_format = "fallback" },
   },
 
-  format_on_save = {
-    -- These options will be passed to conform.format()
-    timeout_ms = 1000,
-    lsp_fallback = true,
-  },
+  -- format_on_save = {
+  --   -- These options will be passed to conform.format()
+  --   timeout_ms = 1000,
+  --   lsp_fallback = true,
+  -- },
 }
 
 return options
