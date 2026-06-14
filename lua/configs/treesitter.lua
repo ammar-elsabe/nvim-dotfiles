@@ -1,12 +1,17 @@
-local options = {
-  ensure_installed = { "lua" },
+require("nvim-treesitter").install({
+  "lua",
+  "markdown",
+  "markdown_inline",
+  "rust",
+  "sql",
+})
 
-  highlight = {
-    enable = true,
-    use_languagetree = true,
-  },
+vim.api.nvim_create_autocmd("FileType", {
+  callback = function(ev)
+    pcall(vim.treesitter.start, ev.buf)
+  end,
+})
 
-  indent = { enable = true },
-}
-
-return options
+-- Let treesitter injections (e.g. SQL in sqlx macros) take priority
+-- over rust-analyzer semantic tokens for string content
+vim.api.nvim_set_hl(0, "@lsp.type.string.rust", {})
