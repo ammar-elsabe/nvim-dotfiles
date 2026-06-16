@@ -9,7 +9,7 @@ local options = {
     dart = { "dart_format" },
     css = { "prettier" },
     html = { "prettier" },
-    go = { "golines" },
+    go = { "goimports", "golines" },
     rust = { "rustfmt", lsp_format = "fallback" },
     solidity = { lsp_format = "always" },
     bazel = { "buildifier", lsp_format = "fallback" },

@@ -9,10 +9,11 @@ end
 
 return {
   {
-    "yetone/avante.nvim",
+    "ammar-elsabe/avante.nvim",
+    branch = "fix/acp-follow-agent-locations",
     event = "VeryLazy",
     version = false, -- Never set this value to "*"! Never!
-    build = "make",
+    build = "make BUILD_FROM_SOURCE=true",
     ---@module 'avante'
     ---@type avante.Config
     opts = {
@@ -51,7 +52,7 @@ return {
         },
         ["codex"] = {
           command = "bunx",
-          args = { "-y", "@zed-industries/codex-acp@latest" },
+          args = { "-y", "@zed-industries/codex-acp@0.16" },
           env = acp_env(),
         },
       },

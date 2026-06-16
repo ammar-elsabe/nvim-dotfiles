@@ -12,6 +12,6 @@ vim.api.nvim_create_autocmd("FileType", {
   end,
 })
 
--- Let treesitter injections (e.g. SQL in sqlx macros) take priority
+-- Let treesitter injections (SQL in sqlx macros) take priority
 -- over rust-analyzer semantic tokens for string content
 vim.api.nvim_set_hl(0, "@lsp.type.string.rust", {})
