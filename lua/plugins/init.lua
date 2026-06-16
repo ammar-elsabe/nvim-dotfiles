@@ -1,5 +1,72 @@
 return {
   {
+    "nickjvandyke/opencode.nvim",
+    version = "*", -- Latest stable release
+    ---@type opencode.Opts
+    opts = {},
+    config = function(_, opts)
+      vim.g.opencode_opts = opts
+    end,
+    -- Recommended/example keymaps
+    keys = {
+      {
+        "<leader>oa",
+        function()
+          require("opencode").ask "@this: "
+        end,
+        mode = { "n", "x" },
+        desc = "Ask OpenCode…",
+      },
+
+      {
+        "<leader>os",
+        function()
+          require("opencode").select()
+        end,
+        mode = { "n", "x" },
+        desc = "Select OpenCode…",
+      },
+
+      {
+        "go",
+        function()
+          return require("opencode").operator "@this "
+        end,
+        mode = { "n", "x" },
+        desc = "Append range to OpenCode",
+        expr = true,
+      },
+
+      {
+        "goo",
+        function()
+          return require("opencode").operator "@this " .. "_"
+        end,
+        mode = "n",
+        desc = "Append line to OpenCode",
+        expr = true,
+      },
+
+      {
+        "<S-C-u>",
+        function()
+          require("opencode").command "session.half.page.up"
+        end,
+        mode = "n",
+        desc = "Scroll OpenCode up",
+      },
+
+      {
+        "<S-C-d>",
+        function()
+          require("opencode").command "session.half.page.down"
+        end,
+        mode = "n",
+        desc = "Scroll OpenCode down",
+      },
+    },
+  },
+  {
     "coder/claudecode.nvim",
     dependencies = { "folke/snacks.nvim" },
     config = true,
@@ -21,6 +88,7 @@ return {
     },
     opts = {
       terminal_cmd = vim.fn.exepath "claude",
+      focus_after_send = true,
     },
     keys = {
       { "<leader>a", nil, desc = "AI/Claude Code" },
