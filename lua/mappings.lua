@@ -21,7 +21,11 @@ map("i", "jk", "<ESC>", { desc = "Escape insert mode" })
 map("n", "gD", vim.lsp.buf.declaration, { desc = "Go to declaration" })
 map("n", "gd", vim.lsp.buf.definition, { desc = "Go to definition" })
 
-map("n", "<leader>dl", vim.diagnostic.open_float, { desc = "Open Diagnostic Float" })
+map("n", "<leader>ca", vim.lsp.buf.code_action, { desc = "LSP Code Action" })
+
+map("n", "<leader>dl", function()
+	vim.diagnostic.open_float({ border = "rounded" })
+end, { desc = "Floating diagnostic" })
 map("n", "<leader>dn", vim.diagnostic.goto_next, { desc = "Go to next diagnostic" })
 map("n", "<leader>dN", vim.diagnostic.goto_prev, { desc = "Go to previous diagnostic" })
 map("n", "<leader>dq", vim.diagnostic.setloclist, { desc = "Diagnostic set loclist" })
@@ -69,3 +73,13 @@ local function switch_case()
 end
 
 map("n", "<leader>sc", switch_case, { desc = "Switch Case" })
+
+map("n", "<leader>ip", function()
+	local venv = os.getenv("VIRTUAL_ENV") or os.getenv("CONDA_PREFIX")
+	if venv ~= nil then
+		venv = string.match(venv, "/.+/(.+)")
+		vim.cmd(("MoltenInit %s"):format(venv))
+	else
+		vim.cmd("MoltenInit python3")
+	end
+end, { desc = "Initialize Molten for python3", silent = true })
