@@ -1,4 +1,17 @@
 return {
+  -- Keep NvChad ui + base46 on the same branch so the base46 cache
+  -- (e.g. the "blink" highlights file) matches what ui expects. Without
+  -- this, ui follows its v3.0 default while base46 stays on v2.5 (cmp-only),
+  -- which breaks blink.cmp's config step.
+  { "nvchad/ui", branch = "v3.0" },
+  {
+    "nvchad/base46",
+    branch = "v3.0",
+    build = function()
+      require("base46").load_all_highlights()
+    end,
+  },
+
   {
     "nickjvandyke/opencode.nvim",
     version = "*", -- Latest stable release
