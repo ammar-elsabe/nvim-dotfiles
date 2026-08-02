@@ -102,6 +102,9 @@ return {
     opts = {
       terminal_cmd = vim.fn.exepath "claude",
       focus_after_send = true,
+      diff_opts = {
+        layout = "unified",
+      },
     },
     keys = {
       { "<leader>a", nil, desc = "AI/Claude Code" },
@@ -139,16 +142,8 @@ return {
     end,
   },
   {
-    "ray-x/navigator.lua",
-    dependencies = {
-      { "ray-x/guihua.lua", run = "cd lua/fzy && make" },
-      { "neovim/nvim-lspconfig" },
-    },
-  },
-  {
     "ray-x/go.nvim",
     dependencies = { -- optional packages
-      "ray-x/guihua.lua",
       "neovim/nvim-lspconfig",
       "nvim-treesitter/nvim-treesitter",
     },
@@ -260,7 +255,7 @@ return {
   },
   {
     "nvim-telescope/telescope.nvim",
-    dependencies = { "nvim-treesitter/nvim-treesitter", "nvim-telescope/telescope-ui-select.nvim" },
+    dependencies = { "nvim-treesitter/nvim-treesitter" },
     cmd = "Telescope",
     lazy = false,
     config = function(_, _)
@@ -279,12 +274,7 @@ return {
             n = { ["<c-t>"] = open_with_trouble, ["<c-a>"] = add_to_trouble },
           },
         },
-
-        extensions = {
-          ["ui-select"] = require("telescope.themes").get_dropdown {},
-        },
       }
-      telescope.load_extension "ui-select"
     end,
   },
   {
@@ -383,9 +373,20 @@ return {
   {
     "simrat39/inlay-hints.nvim",
   },
+  -- Owns `vim.ui.select` (Snacks.picker.select) and `vim.ui.input` (Snacks.input).
+  -- Replaces the archived dressing.nvim + telescope-ui-select.
   {
-    "stevearc/dressing.nvim",
+    "folke/snacks.nvim",
+    priority = 1000,
     lazy = false,
+    ---@type snacks.Config
+    opts = {
+      input = { enabled = true },
+      picker = {
+        enabled = true,
+        ui_select = true, -- sets vim.ui.select
+      },
+    },
   },
   -- {
   -- 	"leoluz/nvim-dap-go",

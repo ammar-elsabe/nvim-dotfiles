@@ -18,7 +18,10 @@ vim.api.nvim_create_autocmd("BufEnter", {
     })
 
     if root and root ~= vim.uv.cwd() then
-      vim.uv.chdir(root)
+      -- use :cd (not vim.uv.chdir) so Neovim fixes up relative buffer
+      -- names on the directory change; a raw libuv chdir leaves them
+      -- stale and breaks :w for files opened via a relative path.
+      vim.cmd.cd(root)
     end
   end,
 })

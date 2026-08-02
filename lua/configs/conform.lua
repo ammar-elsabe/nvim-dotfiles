@@ -1,12 +1,6 @@
 local options = {
   lsp_fallback = true,
 
-  formatters = {
-    dart_format = {
-      prepend_args = { "--line-length", "100" },
-    },
-  },
-
   formatters_by_ft = {
     lua = { "stylua" },
     rust = { "rustfmt", lsp_format = "fallback" },
@@ -21,6 +15,7 @@ local options = {
     bzl = { "buildifier" },
     bazel = { "buildifier", lsp_format = "fallback" },
     solidity = { lsp_format = "always" },
+    toml = { "taplo" },
   },
 
   -- format_on_save = {
