@@ -165,14 +165,12 @@ return {
 
       local cargoConfigExists = vim.uv.fs_stat(cargoConfigPath) ~= nil
 
-      local extraEnv = {}
+      local extraEnv = nil
 
       if cargoConfigExists then
         local toml = require "toml"
         local cargoConfig = toml.parse_file(cargoConfigPath)
-        if cargoConfig.env ~= nil then
-          extraEnv = cargoConfig.env
-        end
+        extraEnv = cargoConfig.env
       end
 
       vim.g.rustaceanvim = {
@@ -182,8 +180,10 @@ return {
           default_settings = {
             ["rust-analyzer"] = {
               ["cargo"] = {
-                --   -- ["features"] = "all",
                 extraEnv = extraEnv,
+                buildScripts = {
+                  enable = true,
+                },
               },
             },
           },

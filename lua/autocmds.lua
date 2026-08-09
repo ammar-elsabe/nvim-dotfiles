@@ -3,8 +3,11 @@
 vim.api.nvim_create_autocmd("BufEnter", {
   group = vim.api.nvim_create_augroup("auto_root", { clear = true }),
   callback = function(args)
-    -- only act on normal file buffers
+    -- only act on real, on-disk file buffers
     if vim.bo[args.buf].buftype ~= "" then
+      return
+    end
+    if vim.api.nvim_buf_get_name(args.buf) == "" then
       return
     end
 
