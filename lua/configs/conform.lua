@@ -16,6 +16,7 @@ local options = {
     bazel = { "buildifier", lsp_format = "fallback" },
     solidity = { lsp_format = "always" },
     toml = { "taplo" },
+    jsonnet = { "jsonnetfmt" },
   },
 
   -- format_on_save = {

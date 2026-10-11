@@ -11,7 +11,59 @@ return {
       require("base46").load_all_highlights()
     end,
   },
+  {
+    "rauls-kjarners/omp.nvim",
+    event = "VeryLazy",
+    keys = {
+      {
+        "<leader>ao",
+        function()
+          Snacks.terminal.toggle("omp", {
+            win = {
+              position = "right",
+              width = 0.4,
+            },
+          })
+        end,
+      },
+    },
+  },
+  {
+    "nwiizo/codex.nvim",
 
+    cmd = {
+      "Codex",
+      "CodexFocus",
+      "CodexSendVisual",
+      "CodexAddVisual",
+    },
+
+    opts = {
+      backend = "terminal",
+
+      -- Don't jump into Codex every time you send something
+      focus_after_send = false,
+
+      terminal = {
+        split_side = "right",
+        split_width_percentage = 0.35,
+      },
+    },
+
+    keys = {
+      {
+        "<leader>cx",
+        "<cmd>Codex<cr>",
+        desc = "Codex: Toggle",
+      },
+      {
+        "<leader>cs",
+        ":<C-U>CodexAddVisual<CR>",
+        mode = "v",
+        desc = "Codex: Send selection",
+      },
+    },
+  },
   {
     "nickjvandyke/opencode.nvim",
     version = "*", -- Latest stable release
@@ -253,29 +305,10 @@ return {
     -- dependencies = { "nvim-tree/nvim-web-devicons" }, -- use if prefer nvim-web-devicons
     cmd = "Oil",
   },
+  -- NvChad still specs telescope. enabled=false is what keeps it from loading.
   {
     "nvim-telescope/telescope.nvim",
-    dependencies = { "nvim-treesitter/nvim-treesitter" },
-    cmd = "Telescope",
-    lazy = false,
-    config = function(_, _)
-      local actions = require "telescope.actions"
-      local open_with_trouble = require("trouble.sources.telescope").open
-
-      -- Use this to add more results without clearing the trouble list
-      local add_to_trouble = require("trouble.sources.telescope").add
-
-      local telescope = require "telescope"
-
-      telescope.setup {
-        defaults = {
-          mappings = {
-            i = { ["<c-t>"] = open_with_trouble, ["<c-a>"] = add_to_trouble },
-            n = { ["<c-t>"] = open_with_trouble, ["<c-a>"] = add_to_trouble },
-          },
-        },
-      }
-    end,
+    enabled = false,
   },
   {
     "folke/trouble.nvim",
@@ -374,7 +407,7 @@ return {
     "simrat39/inlay-hints.nvim",
   },
   -- Owns `vim.ui.select` (Snacks.picker.select) and `vim.ui.input` (Snacks.input).
-  -- Replaces the archived dressing.nvim + telescope-ui-select.
+  -- Picker replaces the telescope finders. `<c-t>` / `<c-a>` inside a picker open/add in Trouble.
   {
     "folke/snacks.nvim",
     priority = 1000,
@@ -385,6 +418,34 @@ return {
       picker = {
         enabled = true,
         ui_select = true, -- sets vim.ui.select
+        actions = {
+          trouble_open = {
+            action = function(picker)
+              require("trouble.sources.snacks").open(picker)
+            end,
+            desc = "Open in Trouble",
+          },
+          trouble_add = {
+            action = function(picker)
+              require("trouble.sources.snacks").open(picker, { add = true })
+            end,
+            desc = "Add to Trouble",
+          },
+        },
+        win = {
+          input = {
+            keys = {
+              ["<c-t>"] = { "trouble_open", mode = { "n", "i" } },
+              ["<c-a>"] = { "trouble_add", mode = { "n", "i" } },
+            },
+          },
+          list = {
+            keys = {
+              ["<c-t>"] = { "trouble_open", mode = { "n", "x" } },
+              ["<c-a>"] = { "trouble_add", mode = { "n", "x" } },
+            },
+          },
+        },
       },
     },
   },

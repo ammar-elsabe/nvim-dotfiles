@@ -1,8 +1,8 @@
-local funcs = require("configs.lspconfig_functions")
+local funcs = require "configs.lspconfig_functions"
 local on_attach = funcs.on_attach
 
 require("nvchad.configs.lspconfig").defaults()
-require("lspconfig")
+require "lspconfig"
 
 vim.filetype.add {
   pattern = {
@@ -12,7 +12,18 @@ vim.filetype.add {
 
 vim.lsp.inlay_hint.enable()
 
+local map = vim.keymap.set
+map("n", "<leader>ca", vim.lsp.buf.code_action, { desc = "LSP Code Action" })
+map("v", "<leader>ca", function(t)
+  t = t or {}
+  vim.lsp.buf.code_action {
+    context = { diagnostics = vim.diagnostic.get() },
+    range = t.range,
+  }
+end, { desc = "LSP Range Code Action" })
+
 local servers = {
+  "jsonnet_ls",
   "starpls",
   "lua_ls",
   "pyright",
@@ -43,11 +54,11 @@ local servers = {
 }
 vim.lsp.enable(servers, true)
 
-for _, lsp in ipairs(servers) do
-  vim.lsp.config(lsp, {
-    on_attach = on_attach,
-  })
-end
+-- for _, lsp in ipairs(servers) do
+--   vim.lsp.config(lsp, {
+--     on_attach = on_attach,
+--   })
+-- end
 
 vim.lsp.config("cairo_ls", {
   on_attach = on_attach,
@@ -55,7 +66,7 @@ vim.lsp.config("cairo_ls", {
   filetypes = { "cairo" },
 })
 
-require("go").setup({})
+require("go").setup {}
 
 local cfg = require("go.lsp").config()
 

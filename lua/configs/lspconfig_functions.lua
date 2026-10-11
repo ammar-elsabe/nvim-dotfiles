@@ -15,7 +15,6 @@ function M.run_range_code_action(t)
 end
 
 function M.run_code_action()
-	-- code_action() picks up the visual selection on its own in visual mode
 	vim.lsp.buf.code_action()
 end
 
